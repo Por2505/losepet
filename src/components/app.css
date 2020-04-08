@@ -24,14 +24,23 @@ input[type=text], select, textarea {
   input[type=submit]:hover {
     background-color: #45a049;
   }
-  
+  .head{
+    background-image: url("../components/cat.jpeg");
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    
+  }
   .container {
+    margin-top: 8%;
+    margin-bottom: 8%;
     border-radius: 5px;
     background-color: #f2f2f2;
+    opacity: 0.9;
     padding: 20px;
     width: 50%;
-    align-items: center;
-    text-align: center;
   }
   
   .col-25 {
@@ -40,7 +49,7 @@ input[type=text], select, textarea {
     margin-top: 6px;
   }
   
-  .col-75 {
+  .col-50 {
     float: left;
     width: 50%;
     margin-top: 6px;
@@ -60,3 +69,34 @@ input[type=text], select, textarea {
       margin-top: 0;
     }
   }
+
+  #header{
+    background-color: black;
+    height: 35%;
+    font-size: 35px;
+    -moz-align-items: center;
+  -webkit-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  -moz-justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  background: #111111;
+  color: rgba(255, 255, 255, 255);
+  cursor: default;
+  height: 3.25rem;
+  left: 0;
+  line-height: 3.25rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10001;
+  padding-left: 20px;
+  }
+ 
+  
