@@ -12,7 +12,7 @@ input[type=text], select, textarea {
   }
   
   input[type=submit] {
-    background-color: #4CAF50;
+    background-color: #cc0000;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -22,7 +22,7 @@ input[type=text], select, textarea {
   }
   
   input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: #990000;
   }
   .head{
     background-image: url("../components/cat.jpeg");
@@ -73,7 +73,7 @@ input[type=text], select, textarea {
   #header{
     background-color: black;
     height: 35%;
-    font-size: 35px;
+
     -moz-align-items: center;
   -webkit-align-items: center;
   -ms-align-items: center;
@@ -86,17 +86,26 @@ input[type=text], select, textarea {
   -webkit-justify-content: space-between;
   -ms-justify-content: space-between;
   justify-content: space-between;
-  background: #111111;
-  color: rgba(255, 255, 255, 255);
   cursor: default;
   height: 3.25rem;
-  left: 0;
   line-height: 3.25rem;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 10001;
-  padding-left: 20px;
+
   }
- 
+  .logo{
+padding-left: 20px;
+color: rgba(255, 255, 255, 255);
+font-size: 35px;
+  }
+  .login{
+    padding-right: 20px;
+    color: rgba(255, 255, 255, 255);
+    font-size: 15px;
+  }
+ form{
+   width: 100%;
+ }
   
