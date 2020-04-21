@@ -2,28 +2,11 @@
 import React from 'react';
 import './app.css';
 
-
 export default (props) => {
   const {image,handlePhotoChange,handleNameChange,handleEmailChange,handleLocationChange,handlePhoneChange} = props
     return (
       <div>
-      <header id="header">
-
-        <div className="logo">
-        LosePet 
-        
-        
-        </div>
-        <div className="login">
-        <input type="submit" value="Login"/>
-        </div>
-        
-				
-			</header>
-
-		
-      <div className="head">
-        <div className="container">
+      
             <form>
             <div className="row">
               <div className="col-50">
@@ -85,11 +68,8 @@ export default (props) => {
       <input type="text" id="email" name="email" placeholder="Your Email" onChange={handleEmailChange}/>
     </div>
     </div>
-   
   </form>
 
-</div>
-</div>
 </div>
     )
     }

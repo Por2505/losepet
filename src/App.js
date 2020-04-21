@@ -2,16 +2,35 @@ import React,{useEffect,useState} from 'react';
 import './App.css';
 import Input from './components/Input';
 import Task from './components/Task';
-import {firestore} from './index'
+import Head from './components/Head';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpgSgZL_aKKjjyUZXQBTspW0j5x-S8bSI",
+  authDomain: "losepet-c4a51.firebaseapp.com",
+  databaseURL: "https://losepet-c4a51.firebaseio.com",
+  projectId: "losepet-c4a51",
+  storageBucket: "losepet-c4a51.appspot.com",
+  messagingSenderId: "268111742243",
+  appId: "1:268111742243:web:399f5eba67c4880d9b3896",
+  measurementId: "G-GG12Q19QPY"
+};
+
+firebase.initializeApp(firebaseConfig)
 
 function App() {
+  
   const [tasks, setTasks] = useState([])
   const [name, setName] = useState('')
   const [photo, setPhoto] = useState({preview: '', raw: ''})
   const [location, setLocation] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
-
+  const [isSignedIn,setisSignedIn] = useState(false)
   useEffect( () =>{
     retriveData ()
   },[])
@@ -36,7 +55,10 @@ function App() {
     })
   }
   const retriveData = () => {
-    firestore.collection('tasks').onSnapshot(snapshot => {
+    firebase.auth().onAuthStateChanged(
+      (user) => {setisSignedIn(!!user)}
+    );
+    firebase.firestore().collection('tasks').onSnapshot(snapshot => {
         let mytask = snapshot.docs.map(d => {
           const {id,name,photo,location,phone,email} = d.data()
           return {id,name,photo,location,phone,email}
@@ -46,16 +68,16 @@ function App() {
   }
 
   const deleteTask = (id) => {
-    firestore.collection("tasks").doc(id+'').delete()
+    firebase.firestore().collection("tasks").doc(id+'').delete()
   }
   const editTask = (id) => {
-    firestore.collection("tasks").doc(id+'').set({id,name,photo:photo.preview,location,phone,email})
+    firebase.firestore().collection("tasks").doc(id+'').set({id,name,photo:photo.preview,location,phone,email})
   }
 
   const addTask = () => {
     let id =  (tasks.length === 0)? 1 : tasks[tasks.length-1].id +1
     console.log(tasks)
-    firestore.collection("tasks").doc(id+ '').set({id,name,photo:photo.preview,location,phone,email})
+    firebase.firestore().collection("tasks").doc(id+ '').set({id,name,photo:photo.preview,location,phone,email})
   }
 
   const renderTask= () => {
@@ -70,14 +92,49 @@ function App() {
         return (<li>No Pet</li>)
     
   }
+
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    // We will display Google , Facebook , Etc as auth providers.
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccess: () => false
+    }
+  };
+
+ 
+  let login = null;
+  if (!isSignedIn) {
+    login = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+  } else {
+    login = <div>
+      <p>Welcome {firebase.auth().currentUser.displayName}! You are now signed-in!</p>
+          <img id="photo" className="pic" src={firebase.auth().currentUser.photoURL} width='80'/>
+        <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
+    </div>
+  } 
   return (
     <div className="App">
-        <center><Input image={photo} handlePhotoChange={handlePhotoChange} handleNameChange={handleNameChange}
+        <Head/>
+        <div className="head">
+        <div className="container">
+        <div className="formm">
+       <Input image={photo} handlePhotoChange={handlePhotoChange} handleNameChange={handleNameChange}
         handleEmailChange={handleEmailChange} handlePhoneChange={handlePhoneChange} handleLocationChange={handleLocationChange}
         />
-        <input type="submit" value="submit" onClick={addTask}/>
-        </center>
+            <input type="submit" value="submit" onClick={addTask}/>
+         </div>
+        </div>
+        </div>
         <ul style={{display: 'flex', listStyle: 'none'}}>{renderTask()}</ul><br/>
+        {login}
+
+
+        
     </div>
   );
 }
