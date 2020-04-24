@@ -33,3 +33,7 @@ font-size: 35px;
     color: rgba(255, 255, 255, 255);
     font-size: 15px;
   }
+  .search{
+    width: 200px;
+    padding-right: 10px;
+  }

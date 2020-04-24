@@ -26,7 +26,10 @@ function App() {
   
   const [tasks, setTasks] = useState([])
   const [name, setName] = useState('')
+  const [pet,setPet] = useState('')
+  const [search, setSearch] = useState('')
   const [photo, setPhoto] = useState({preview: '', raw: ''})
+  const [gender, setGender] = useState('')
   const [location, setLocation] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
@@ -39,8 +42,18 @@ function App() {
     setName(e.target.value)
   }
 
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value)
+  }
+  const handlePetChange = (e) => {
+    setPet(e.target.value)
+  }
+
   const handleLocationChange = (e) => {
     setLocation(e.target.value)
+  }
+  const handleGenderChange = (e) => {
+    setGender(e.target.value)
   }
   const handlePhoneChange = (e) => {
     setPhone(e.target.value)
@@ -60,8 +73,8 @@ function App() {
     );
     firebase.firestore().collection('tasks').onSnapshot(snapshot => {
         let mytask = snapshot.docs.map(d => {
-          const {id,name,photo,location,phone,email} = d.data()
-          return {id,name,photo,location,phone,email}
+          const {id,name,pet,photo,location,gender,phone,email} = d.data()
+          return {id,name,pet,photo,location,gender, phone,email}
         })
         setTasks(mytask)
     })
@@ -71,22 +84,24 @@ function App() {
     firebase.firestore().collection("tasks").doc(id+'').delete()
   }
   const editTask = (id) => {
-    firebase.firestore().collection("tasks").doc(id+'').set({id,name,photo:photo.preview,location,phone,email})
+    firebase.firestore().collection("tasks").doc(id+'').set({id,name,pet,photo:photo.preview,location,gender,phone,email})
   }
 
   const addTask = () => {
     let id =  (tasks.length === 0)? 1 : tasks[tasks.length-1].id +1
     console.log(tasks)
-    firebase.firestore().collection("tasks").doc(id+ '').set({id,name,photo:photo.preview,location,phone,email})
+    firebase.firestore().collection("tasks").doc(id+ '').set({id,name,pet,photo:photo.preview,location,gender,phone,email})
   }
 
   const renderTask= () => {
     if (tasks && tasks.length)
     return tasks.map( (task,index) => {
+      if(task.pet.slice(0,search.length)===search)
         return (
-       <Task key={index} task={task} deleteTask={deleteTask} editTask={editTask} />
+       <Task key={index} task={task} deleteTask={deleteTask} editTask={editTask} isSignedIn={isSignedIn}/>
         
-        )}
+        )
+      else return null}
     )
     else 
         return (<li>No Pet</li>)
@@ -119,12 +134,12 @@ function App() {
   } 
   return (
     <div className="App">
-        <Head/>
+        <Head handleSearchChange={handleSearchChange}/>
         <div className="head">
         <div className="container">
         <div className="formm">
-       <Input image={photo} handlePhotoChange={handlePhotoChange} handleNameChange={handleNameChange}
-        handleEmailChange={handleEmailChange} handlePhoneChange={handlePhoneChange} handleLocationChange={handleLocationChange}
+       <Input image={photo} handlePhotoChange={handlePhotoChange} handleNameChange={handleNameChange} handlePetChange={handlePetChange}
+        handleEmailChange={handleEmailChange} handlePhoneChange={handlePhoneChange} handleLocationChange={handleLocationChange} handleGenderChange={handleGenderChange}
         />
             <input type="submit" value="submit" onClick={addTask}/>
          </div>

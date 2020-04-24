@@ -3,24 +3,26 @@ import React from 'react';
 import './app.css';
 
 export default (props) => {
-  const {image,handlePhotoChange,handleNameChange,handleEmailChange,handleLocationChange,handlePhoneChange} = props
+  const {image,handlePhotoChange,handleNameChange,handleEmailChange,handleLocationChange,handleGenderChange,handlePhoneChange,handlePetChange} = props
     return (
       <div>
       
             <form>
-            <div className="row">
+            {/* <div className="row">
               <div className="col-50">
                 <input
                 type="radio"
-                name="lost"/>Lose Pet
+                name="lost"
+                id="lose"/>Lose Pet
                 </div>
               <div className="col-50">
                <input
                 type="radio"
-                name="lost"/>Found Pet
+                name="lost"
+                id="found"/>Found Pet
                 </div>
       
-           </div>
+           </div> */}
                 <br/>
     <div className="row">
     <div className="col-25">
@@ -28,6 +30,12 @@ export default (props) => {
     </div>
     <div className="col-50">
        <input type="text" id="name" name="name" placeholder="Pet name.." onChange={handleNameChange}/>
+    </div>
+    <div className="col-25">
+        <label htmlFor="name">Pet</label>
+    </div>
+    <div className="col-50">
+       <input type="text" id="name" name="pet" placeholder="Pet type.." onChange={handlePetChange}/>
     </div>
     </div>
     <div className="row">
@@ -44,6 +52,14 @@ export default (props) => {
       <br />
       </div>
  </div>
+ <div className="row">
+   <div className="col-25">
+    <label htmlFor="grnder">Gender</label>
+   </div>
+   <div className="col-50">
+   <input type="text" id="gender" name="gender" placeholder="Gender" onChange={handleGenderChange}/>
+  </div>
+</div>
  <div className="row">
     <div className="col-25">
       <label htmlFor="area">Location</label>

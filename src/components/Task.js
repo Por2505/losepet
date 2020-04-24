@@ -1,32 +1,41 @@
 import React from 'react'
 import './Task.css'
 export default (props) => {
-    const {task,editTask,deleteTask} = props
-    const {id,name,photo,location,phone,email} = task
+    const {task,editTask,deleteTask,isSignedIn} = props
+    const {id,name,pet,photo,location,gender,phone,email} = task
     return (
         <li> 
-            <div className="id">
-                {id}
-            </div>
+            
             <div className="name">
                 {name}
+            </div>
+            <div className="name">
+                {pet}
             </div>
             <div >
                 <img src={photo} width="300" height="300" alt='new'/>
             </div>
-            <div >
-                {location}
+            <div>
+                Gender:{gender}
             </div>
             <div >
-                {phone}
+                location:{location}
+            </div>
+            <div >
+                phone:{phone}
             </div>
             <div>
-                {email}
+               email: {email}
             </div>
-        <div className="container">
-        <button  className="button-red" onClick={() => deleteTask(id)}>Delete</button>
-        <button className="button-green" onClick={() => editTask(id)}>Edit</button>
-        </div>
+            {isSignedIn?
+                <div className="container">
+                <button  className="button-red" onClick={() => deleteTask(id)}>Delete</button>
+                <button className="button-green" onClick={() => editTask(id)}>Edit</button>
+                </div>:null
+
+
+            }
+        
         </li>
     )
 }
