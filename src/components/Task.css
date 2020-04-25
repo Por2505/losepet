@@ -1,11 +1,12 @@
-li {
+.li {
     position: relative;
     display: flex;
     flex-direction: column;
     margin: 0 16px 16px 0;
     box-shadow: 0 0 6px 0 rgba(0,0,0,0.15);
     border-radius: 4px;
-    overflow: hidden;
+    width: 25%;
+
 }
 
 .id{
@@ -14,7 +15,7 @@ li {
     top: 10px;
 }
 .name{
- font-size: 2em;
+ font-size: 1em;
  display: flex;
  justify-content: center;
  flex-direction: column;
@@ -43,3 +44,21 @@ background-color: lightcoral;
     display: flex;
     flex-direction: row;
 }
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+  }
+  
+  .col-50 {
+    float: left;
+    width: 50%;
+    margin-top: 6px;
+    font-size: 1.5em;
+  }
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  

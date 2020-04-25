@@ -2,12 +2,14 @@ import React,{useEffect,useState} from 'react';
 import './App.css';
 import Input from './components/Input';
 import Task from './components/Task';
-import Head from './components/Head';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore'
+import 'firebase/storage'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
+import {BrowserRouter as Router, Route, Switch,Link,Redirect} from 'react-router-dom';
+import Login from './components/Login'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpgSgZL_aKKjjyUZXQBTspW0j5x-S8bSI",
@@ -29,6 +31,7 @@ function App() {
   const [pet,setPet] = useState('')
   const [search, setSearch] = useState('')
   const [photo, setPhoto] = useState({preview: '', raw: ''})
+  const [photoURL, setPhotoURL] = useState('')
   const [gender, setGender] = useState('')
   const [location, setLocation] = useState('')
   const [phone, setPhone] = useState('')
@@ -67,6 +70,21 @@ function App() {
       raw: e.target.files[0]
     })
   }
+  const handleUploadButton = (e) => {
+    e.preventDefault()
+    const uploadTask = firebase.storage().ref(`/images/${photo.raw.name}`).put(photo.raw)
+    uploadTask.on('state_changed', 
+    (snapShot) => {
+      console.log(snapShot)
+    }, (err) => {
+      console.log(err)
+    }, () => {
+      firebase.storage().ref('images').child(photo.raw.name).getDownloadURL()
+     .then(imageURL => {
+      setPhotoURL(imageURL)
+     })
+    })
+  }
   const retriveData = () => {
     firebase.auth().onAuthStateChanged(
       (user) => {setisSignedIn(!!user)}
@@ -84,13 +102,13 @@ function App() {
     firebase.firestore().collection("tasks").doc(id+'').delete()
   }
   const editTask = (id) => {
-    firebase.firestore().collection("tasks").doc(id+'').set({id,name,pet,photo:photo.preview,location,gender,phone,email})
+    firebase.firestore().collection("tasks").doc(id+'').set({id,name,pet,photo:photoURL,location,gender,phone,email})
   }
 
   const addTask = () => {
     let id =  (tasks.length === 0)? 1 : tasks[tasks.length-1].id +1
     console.log(tasks)
-    firebase.firestore().collection("tasks").doc(id+ '').set({id,name,pet,photo:photo.preview,location,gender,phone,email})
+    firebase.firestore().collection("tasks").doc(id+ '').set({id,name,pet,photo:photoURL,location,gender,phone,email})
   }
 
   const renderTask= () => {
@@ -109,47 +127,54 @@ function App() {
   }
 
   const uiConfig = {
-    // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
-    // We will display Google , Facebook , Etc as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID
     ],
     callbacks: {
-      // Avoid redirects after sign-in.
       signInSuccess: () => false
     }
   };
-
- 
   let login = null;
   if (!isSignedIn) {
     login = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
   } else {
-    login = <div>
-      <p>Welcome {firebase.auth().currentUser.displayName}! You are now signed-in!</p>
-          <img id="photo" className="pic" src={firebase.auth().currentUser.photoURL} width='80'/>
-        <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
-    </div>
+    login = <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
   } 
+ 
   return (
     <div className="App">
-        <Head handleSearchChange={handleSearchChange}/>
+        ui
+        <header id="header">
+        <div className="logo">
+        LosePet 
+        </div>
+        <div className="search">
+        <input type="text" id="search" name="search" placeholder="Search Pet Name , Pet type, Location " onChange={handleSearchChange}></input>
+        </div>
+        <div className="login"></div>
+        {login}
+     </header>
+
         <div className="head">
         <div className="container">
         <div className="formm">
-       <Input image={photo} handlePhotoChange={handlePhotoChange} handleNameChange={handleNameChange} handlePetChange={handlePetChange}
+       <Input image={photo} handleUploadButton={handleUploadButton} handlePhotoChange={handlePhotoChange} handleNameChange={handleNameChange} handlePetChange={handlePetChange}
         handleEmailChange={handleEmailChange} handlePhoneChange={handlePhoneChange} handleLocationChange={handleLocationChange} handleGenderChange={handleGenderChange}
         />
             <input type="submit" value="submit" onClick={addTask}/>
          </div>
         </div>
         </div>
-        <ul style={{display: 'flex', listStyle: 'none'}}>{renderTask()}</ul><br/>
-        {login}
-
-
-        
+        <div className="bar">
+        <div className="inbar">
+          Featured Post
+        </div>
+        </div>
+        <div>
+           <h3>When you report a lost pet your post will appeared here as featured post</h3>
+        </div>
+        <ul className="ul">{renderTask()}</ul>
     </div>
   );
 }

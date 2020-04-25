@@ -3,41 +3,31 @@ import React from 'react';
 import './app.css';
 
 export default (props) => {
-  const {image,handlePhotoChange,handleNameChange,handleEmailChange,handleLocationChange,handleGenderChange,handlePhoneChange,handlePetChange} = props
+  const {image,handleUploadButton,handlePhotoChange,handleNameChange,handleEmailChange,handleLocationChange,handleGenderChange,handlePhoneChange,handlePetChange} = props
     return (
       <div>
-      
+
             <form>
-            {/* <div className="row">
-              <div className="col-50">
-                <input
-                type="radio"
-                name="lost"
-                id="lose"/>Lose Pet
-                </div>
-              <div className="col-50">
-               <input
-                type="radio"
-                name="lost"
-                id="found"/>Found Pet
-                </div>
-      
-           </div> */}
                 <br/>
     <div className="row">
     <div className="col-25">
+     
         <label htmlFor="name">Name</label>
+        
     </div>
     <div className="col-50">
        <input type="text" id="name" name="name" placeholder="Pet name.." onChange={handleNameChange}/>
     </div>
+    </div>
+    <div className="row">
     <div className="col-25">
         <label htmlFor="name">Pet</label>
     </div>
     <div className="col-50">
-       <input type="text" id="name" name="pet" placeholder="Pet type.." onChange={handlePetChange}/>
+       <input type="text" id="pet" name="pet" placeholder="Pet type.." onChange={handlePetChange}/>
     </div>
     </div>
+    
     <div className="row">
     <div className="col-25">
       <label htmlFor="name">Photo</label>
@@ -50,6 +40,7 @@ export default (props) => {
       </label>
       <input type="file" id="upload-button" style={{ display: 'none' }} onChange={handlePhotoChange}/>
       <br />
+      <button onClick={handleUploadButton}>Upload</button>
       </div>
  </div>
  <div className="row">

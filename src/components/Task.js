@@ -4,13 +4,14 @@ export default (props) => {
     const {task,editTask,deleteTask,isSignedIn} = props
     const {id,name,pet,photo,location,gender,phone,email} = task
     return (
-        <li> 
-            
-            <div className="name">
+        <li className="li"> 
+            <div>
+            <div className="col-50">
                 {name}
             </div>
-            <div className="name">
+            <div className="col-25">
                 {pet}
+            </div>
             </div>
             <div >
                 <img src={photo} width="300" height="300" alt='new'/>
@@ -30,7 +31,6 @@ export default (props) => {
             {isSignedIn?
                 <div className="container">
                 <button  className="button-red" onClick={() => deleteTask(id)}>Delete</button>
-                <button className="button-green" onClick={() => editTask(id)}>Edit</button>
                 </div>:null
 
 
