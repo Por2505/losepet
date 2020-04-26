@@ -7,9 +7,9 @@ import 'firebase/auth';
 import 'firebase/firestore'
 import 'firebase/storage'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import Foot from './foot.jpg';
+import Foot2 from './foot2.jpg';
 
-import {BrowserRouter as Router, Route, Switch,Link,Redirect} from 'react-router-dom';
-import Login from './components/Login'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpgSgZL_aKKjjyUZXQBTspW0j5x-S8bSI",
@@ -139,18 +139,17 @@ function App() {
   if (!isSignedIn) {
     login = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
   } else {
-    login = <button onClick={() => firebase.auth().signOut()}>Sign-out</button>
+    login = <input type="submit" value="Sign-out" onClick={() => firebase.auth().signOut()}/>
   } 
  
   return (
     <div className="App">
-        ui
         <header id="header">
         <div className="logo">
         LosePet 
         </div>
         <div className="search">
-        <input type="text" id="search" name="search" placeholder="Search Pet Name , Pet type, Location " onChange={handleSearchChange}></input>
+        <input type="text" id="search" name="search" placeholder="Search Pet type, Location " onChange={handleSearchChange}></input>
         </div>
         <div className="login"></div>
         {login}
@@ -175,7 +174,20 @@ function App() {
            <h3>When you report a lost pet your post will appeared here as featured post</h3>
         </div>
         <ul className="ul">{renderTask()}</ul>
+        
+        <img src={Foot} width="100%"/>
+        <div className="foot">
+            <div className="footer">
+              Losepet is actively helping to search for your lost pets in your local area. Report your lost pets here and send a free alert instantly.
+            </div>
+        </div>
+        <div className="foot2">
+        <div className="footer">
+          Sarawadee Noktawee 6035512061 | Copyright © 2020  LosePet
+          </div>
+        </div>
     </div>
+
   );
 }
 

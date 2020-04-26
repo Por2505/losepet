@@ -6,36 +6,44 @@ export default (props) => {
     return (
         <li className="li"> 
             <div>
-            <div className="col-50">
+            <div className="col50">
                 {name}
             </div>
-            <div className="col-25">
-                {pet}
+            <div className="col25">
+               <div className="type"> {pet}</div>
             </div>
-            </div>
-            <div >
-                <img src={photo} width="300" height="300" alt='new'/>
             </div>
             <div>
+                <img src={photo} width="80%"  alt='new'/>
+            </div>
+            <div>
+            <div className="content">
                 Gender:{gender}
             </div>
-            <div >
-                location:{location}
-            </div>
-            <div >
-                phone:{phone}
             </div>
             <div>
-               email: {email}
+            <div className="content">
+                Location:{location}
             </div>
+            </div>
+            <div>
+            <div className="content">
+                Phone:{phone}
+            </div>
+            </div>
+            <div className="cont">
+            <div className="content">
+               Email: {email}
+            </div>
+            </div>
+
             {isSignedIn?
-                <div className="container">
-                <button  className="button-red" onClick={() => deleteTask(id)}>Delete</button>
+                <div className="del">
+                <button  className="red" onClick={() => deleteTask(id)}>Delete</button>
                 </div>:null
 
-
             }
-        
+            
         </li>
     )
 }

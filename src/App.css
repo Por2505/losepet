@@ -163,3 +163,36 @@ font-size: 35px;
   width: 600px;
   padding-right: 10px;
 }
+.foot{
+  background-color:#b71534;
+    background-attachment: fixed;
+    background-size: 100%;
+    position: relative;
+    background-clip: initial;
+    align-self: stretch;
+    -webkit-background-size: cover;
+    height: auto;
+    width:100%;
+    padding:20px 0px 20px 0px;
+}
+.foot2{
+  background-color: #db1d41;
+    background-attachment: fixed;
+    background-size: 100%;
+    position: relative;
+    background-clip: initial;
+    align-self: stretch;
+    -webkit-background-size: cover;
+    height: auto;
+    width:100%;
+    padding:20px 0px 20px 0px;
+}
+.footer{
+  color: white;
+}
+.bgfoot{
+  position: relative;
+  height: auto;
+  width:100%;
+}
+
