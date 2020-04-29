@@ -1,8 +1,14 @@
 import React from 'react'
 import './Task.css'
+import {firestore} from '../App'
+import { useSelector} from 'react-redux';
 export default (props) => {
-    const {task,editTask,deleteTask,isSignedIn} = props
+    const isSignedIn = useSelector(state => state.signin);
+    const {task} = props
     const {id,name,pet,photo,location,gender,phone,email} = task
+    const deleteTask = (id) => {
+        firestore.collection("tasks").doc(id+'').delete()
+    }
     return (
         <li className="li"> 
             <div>

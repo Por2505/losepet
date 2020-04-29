@@ -9,6 +9,7 @@ import 'firebase/storage'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import Foot from './foot.jpg';
 import Foot2 from './foot2.jpg';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 const firebaseConfig = {
@@ -23,92 +24,38 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig)
+export const firestore = firebase.firestore()
+export const storage = firebase.storage()
 
 function App() {
+  const dispatch = useDispatch();
   
-  const [tasks, setTasks] = useState([])
-  const [name, setName] = useState('')
-  const [pet,setPet] = useState('')
-  const [search, setSearch] = useState('')
-  const [photo, setPhoto] = useState({preview: '', raw: ''})
-  const [photoURL, setPhotoURL] = useState('')
-  const [gender, setGender] = useState('')
-  const [location, setLocation] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
-  const [isSignedIn,setisSignedIn] = useState(false)
+  const tasks = useSelector(state => state.tasks);
+  const form = useSelector(state => state.form);
+  const search = useSelector(state => state.search);
+  const isSignedIn = useSelector(state => state.signin);
   useEffect( () =>{
     retriveData ()
   },[])
 
-  const handleNameChange = (e) => {
-    setName(e.target.value)
-  }
-
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value)
-  }
-  const handlePetChange = (e) => {
-    setPet(e.target.value)
-  }
-
-  const handleLocationChange = (e) => {
-    setLocation(e.target.value)
-  }
-  const handleGenderChange = (e) => {
-    setGender(e.target.value)
-  }
-  const handlePhoneChange = (e) => {
-    setPhone(e.target.value)
-  }
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value)
-  }
-  const handlePhotoChange = (e) => {
-    setPhoto({
-      preview: URL.createObjectURL(e.target.files[0]),
-      raw: e.target.files[0]
-    })
-  }
-  const handleUploadButton = (e) => {
-    e.preventDefault()
-    const uploadTask = firebase.storage().ref(`/images/${photo.raw.name}`).put(photo.raw)
-    uploadTask.on('state_changed', 
-    (snapShot) => {
-      console.log(snapShot)
-    }, (err) => {
-      console.log(err)
-    }, () => {
-      firebase.storage().ref('images').child(photo.raw.name).getDownloadURL()
-     .then(imageURL => {
-      setPhotoURL(imageURL)
-     })
-    })
-  }
   const retriveData = () => {
     firebase.auth().onAuthStateChanged(
-      (user) => {setisSignedIn(!!user)}
+      (user) => {dispatch({type:'SIGNIN_SET',signin:!!user})}
     );
     firebase.firestore().collection('tasks').onSnapshot(snapshot => {
         let mytask = snapshot.docs.map(d => {
           const {id,name,pet,photo,location,gender,phone,email} = d.data()
           return {id,name,pet,photo,location,gender, phone,email}
         })
-        setTasks(mytask)
+        dispatch({type:'TASKS_SET',tasks:mytask})
     })
-  }
-
-  const deleteTask = (id) => {
-    firebase.firestore().collection("tasks").doc(id+'').delete()
-  }
-  const editTask = (id) => {
-    firebase.firestore().collection("tasks").doc(id+'').set({id,name,pet,photo:photoURL,location,gender,phone,email})
   }
 
   const addTask = () => {
     let id =  (tasks.length === 0)? 1 : tasks[tasks.length-1].id +1
     console.log(tasks)
-    firebase.firestore().collection("tasks").doc(id+ '').set({id,name,pet,photo:photoURL,location,gender,phone,email})
+    firebase.firestore().collection("tasks").doc(id+ '').set({id,name:form.name,pet:form.pet,
+      photo:form.photoURL,location:form.location,gender:form.gender,phone:form.phone,email:form.email})
   }
 
   const renderTask= () => {
@@ -116,7 +63,7 @@ function App() {
     return tasks.map( (task,index) => {
       if(task.pet.slice(0,search.length)===search)
         return (
-       <Task key={index} task={task} deleteTask={deleteTask} editTask={editTask} isSignedIn={isSignedIn}/>
+       <Task key={index} task={task}/>
         
         )
       else return null}
@@ -149,7 +96,7 @@ function App() {
         LosePet 
         </div>
         <div className="search">
-        <input type="text" id="search" name="search" placeholder="Search Pet type, Location " onChange={handleSearchChange}></input>
+        <input type="text" id="search" name="search" placeholder="Search Pet type, Location " onChange={(e)=>{dispatch({type:'SEARCH_SET',search:e.target.value})}}></input>
         </div>
         <div className="login"></div>
         {login}
@@ -158,9 +105,7 @@ function App() {
         <div className="head">
         <div className="container">
         <div className="formm">
-       <Input image={photo} handleUploadButton={handleUploadButton} handlePhotoChange={handlePhotoChange} handleNameChange={handleNameChange} handlePetChange={handlePetChange}
-        handleEmailChange={handleEmailChange} handlePhoneChange={handlePhoneChange} handleLocationChange={handleLocationChange} handleGenderChange={handleGenderChange}
-        />
+       <Input/>
             <input type="submit" value="submit" onClick={addTask}/>
          </div>
         </div>
