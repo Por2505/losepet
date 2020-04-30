@@ -61,7 +61,7 @@ function App() {
   const renderTask= () => {
     if (tasks && tasks.length)
     return tasks.map( (task,index) => {
-      if(task.pet.slice(0,search.length)===search)
+      if(task.pet.slice(0,search.length)===search||task.location.slice(0,search.length)===search)
         return (
        <Task key={index} task={task}/>
         
@@ -72,7 +72,6 @@ function App() {
         return (<li>No Pet</li>)
     
   }
-
   const uiConfig = {
     signInFlow: 'popup',
     signInOptions: [
@@ -84,7 +83,7 @@ function App() {
   };
   let login = null;
   if (!isSignedIn) {
-    login = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+    login = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> 
   } else {
     login = <input type="submit" value="Sign-out" onClick={() => firebase.auth().signOut()}/>
   } 

@@ -195,4 +195,6 @@ font-size: 35px;
   height: auto;
   width:100%;
 }
-
+.rowline{
+  flex-direction: column;
+}
